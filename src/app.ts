@@ -11,8 +11,6 @@ let data: Array<iData> = [];
 previousButton?.addEventListener("click", () => {
   page -= 1;
   fetchData(`&page=${page}`);
-
-  console.log("Previous page", page);
 });
 
 nextButton?.addEventListener("click", () => {
@@ -57,27 +55,22 @@ const renderTable = () => {
   }
 };
 
-const startApp = async () => {
-  console.log(page);
-
-  await fetchData();
-};
-
-document.addEventListener("DOMContentLoaded", startApp);
-
 const fetchData = async (query = "") => {
   try {
     const response = await fetch(`${API_URL}${query}`);
     const jsonData = await response?.json();
     data = jsonData?.results[0][page];
     page = +jsonData?.info?.page;
-    pageView.textContent = page;
+    pageView.textContent = `Showing Page ${page}`;
     isLoader();
     renderTable();
-
-    console.log("Here<><><><><>", data);
-    console.log("page", page);
   } catch (error) {
     throw new Error(error);
   }
 };
+
+const startApp = async () => {
+  await fetchData();
+};
+
+document.addEventListener("DOMContentLoaded", startApp);
