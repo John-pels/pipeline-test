@@ -1,0 +1,15 @@
+{
+    "source": "src/index.html",
+    "scripts": {
+      "start": "parcel",
+      "build": "parcel build"
+    },
+    "browserslist": "> 0.5%, last 2 versions, not dead",
+    "dependencies": {},
+    "devDependencies": {
+      "buffer": "^6.0.3",
+      "parcel": "^2.6.2",
+      "process": "^0.11.10"
+    }
+  }
+  

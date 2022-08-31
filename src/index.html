@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Paginated Data</title>
+
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+
+    <table>
+        <caption>paginated random data of app users</caption>
+        <thead>
+            <tr>
+                <td># No.</td>
+                <td>Gender</td>
+                <td>Age</td>
+            </tr>
+        </thead>
+        <tbody data-sink>
+            <tr>
+                <td></td>
+                <td></td>
+                <td></td>
+            </tr>
+            <tr>
+                <td></td>
+                <td></td>
+                <td></td>
+            </tr>
+            <tr>
+                <td></td>
+                <td></td>
+                <td></td>
+            </tr>
+            <tr>
+                <td></td>
+                <td></td>
+                <td></td>
+            </tr>
+            <tr>
+                <td></td>
+                <td></td>
+                <td></td>
+            </tr>
+        </tbody>
+    </table>
+
+    <div class="btn-group">
+        <button data-prevbtn>Previous</button>
+        <button data-nextbtn>Next</button>
+        <label data-pageview></label>
+    </div>
+
+    <script type="module" src="app.ts"></script>
+</body>
+
+</html>

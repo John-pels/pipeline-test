@@ -1,0 +1,90 @@
+body {
+    font-family: sans-serif;
+}
+
+table {
+    border-collapse: collapse;
+    border: 1px solid black;
+    text-align: center;
+    vertical-align: middle;
+    min-width: 65%;
+    margin-bottom: 1em;
+}
+
+caption {
+    font-size: 24px;
+    text-align: left;
+    color: #333;
+    margin-bottom: 16px;
+}
+
+thead {
+    background-color: #333;
+    color: white;
+    font-size: 0.875rem;
+    text-transform: uppercase;
+    letter-spacing: 2%;
+}
+
+th,
+td {
+    border: 1px solid black;
+    padding: 10px;
+}
+
+thead th {
+    width: 25%;
+    background-color: #36c;
+    color: #fff;
+    text-align: left;
+}
+
+tbody tr:nth-child(odd) {
+    background-color: #fff;
+}
+
+tbody tr:nth-child(even) {
+    background-color: #eee;
+}
+
+.btn-group button {
+    background-color: #04AA6D;
+    /* Green background */
+    border: 1px solid green;
+    /* Green border */
+    color: white;
+    /* White text */
+    padding: 10px 24px;
+    /* Some padding */
+    cursor: pointer;
+    /* Pointer/hand icon */
+    float: left;
+    /* Float the buttons side by side */
+    pointer-events: all;
+}
+
+.btn-group button:not(:last-child) {
+    border-right: none;
+    /* Prevent double borders */
+}
+
+/* Clear floats (clearfix hack) */
+.btn-group:after {
+    content: "";
+    clear: both;
+    display: table;
+}
+
+/* Add a background color on hover */
+.btn-group button:hover {
+    background-color: #3e8e41;
+}
+
+.btn-group button:disabled {
+    pointer-events: none;
+}
+
+.btn-group label {
+    display: inline-block;
+    margin: 0.6em 1em;
+}

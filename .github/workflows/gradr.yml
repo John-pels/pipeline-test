@@ -1,0 +1,59 @@
+name: Gradr
+
+on:
+  push:
+    branches:
+      - main
+      - master
+  pull_request:
+    branches: 
+      - main
+      - master
+
+jobs:    
+  autograde:
+    name: Test & Auto-grade Code Challenge
+    if: ${{ !github.event.repository.is_template }}
+    runs-on: ubuntu-latest
+    
+    strategy:
+      matrix:
+        node-version: [16.x]
+
+    steps:
+    - name: Checkout Your Code
+      uses: actions/checkout@v2
+
+    - name: Prepare Environment
+      uses: actions/setup-node@v1
+      with:
+        node-version: ${{ matrix.node-version }}
+    
+    - name: Acquire Audits
+      uses: actions/checkout@v2
+      with: 
+        repository: pipeline-v2-eligibility/audits
+        path: audits
+
+    - name: Install Dependencies
+      run: |
+        cd audits
+        git pull --no-rebase
+        npm install
+        npm run frontend-install-playwright
+
+    - name: Test Frontend App
+      run: |
+        cd audits
+        npm run audit-frontend
+
+    - name: Report Audits
+      if: always()
+      uses: pipeline-v2-eligibility/jest-to-sheets@v1
+      with:
+        track: 'frontend'
+        server: https://api.sheetson.com/v2/sheets
+        sheetid: 1TpZp5pXOGDNhODDvbbjEffXopljG0MPdLxl0RVFY3yo
+        token: HXlur8K20ZpoB-6FNsnSUtj2kGoDqCDHDl8vZBdLtQCv9UFOVhMsM2IBwD8
+        properties: ${{ github.workspace }}/properties.json
+        
