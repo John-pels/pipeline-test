@@ -73,4 +73,4 @@ const startApp = async () => {
   await fetchData();
 };
 
-document.addEventListener("DOMContentLoaded", startApp);
+document.addEventListener("readystatechange", startApp);
