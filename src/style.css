@@ -39,6 +39,10 @@ thead th {
   text-align: left;
 }
 
+tbody {
+  position: relative;
+}
+
 tbody tr:nth-child(odd) {
   background-color: #fff;
 }

@@ -1,60 +1,83 @@
 import { iData } from "./@types";
 
-const tableBody = document.querySelector("tbody[data-sink]");
+const tableBody: any = document.querySelector("tbody[data-sink]");
 const pageView: any = document.querySelector("label[data-pageview]");
 const previousButton = document.querySelector("button[data-prevbtn]");
-const nextButton = document.querySelector("button[data-nextbtn]");
+const nextButton: any = document.querySelector("button[data-nextbtn]");
 const API_URL = "https://randomapi.com/api/8csrgnjw?key=LEIX-GF3O-AG7I-6J84";
-let page: number = 0;
+let page: number = 1;
 let data: Array<iData> = [];
 
 previousButton?.addEventListener("click", () => {
-  if (page === 1) {
-    previousButton.setAttribute("disabled", "true");
-    return;
-  }
-  console.log("Hey Previous");
-  fetchData(`&page=${page - 1}`);
+  page -= 1;
+  fetchData(`&page=${page}`);
+
+  console.log("Previous page", page);
 });
 
 nextButton?.addEventListener("click", () => {
-  console.log("Hey Next");
-  fetchData(`&page=${page + 1}`);
+  page += 1;
+  isLoader(true);
+  fetchData(`&page=${page}`);
 });
 
-const fetchData = async (query = "") => {
-  try {
-    const response = await fetch(`${API_URL}${query}`);
-    const jsonData = await response.json();
-    data = jsonData.results[0][1];
-    page = +jsonData.info.page;
-
-    console.log("Here<><><><><>", jsonData);
-  } catch (error) {
-    throw new Error(error);
+const isLoader = (isLoad = false) => {
+  if (isLoad) {
+    nextButton.setAttribute("disabled", "true");
+    nextButton.innerHTML = "Loading Data...";
+  } else {
+    nextButton.innerHTML = "Next";
+    nextButton.removeAttribute("disabled");
   }
 };
 
 const renderTable = () => {
-  data.map((user) => {
+  for (let i = 0; i < data.length; i++) {
     let tableRow = document.createElement("tr");
-    tableRow.setAttribute("data-entryid", user.id);
-    const recordValues = Object.values(user).slice(1);
-    recordValues.forEach((record) => {
-      let tableCell: any = document.createElement("td");
-      tableCell.innerText = record;
+    tableRow.setAttribute("data-entryid", data[i].id);
+    tableRow.innerHTML = `
+      <td>${data[i].row}</td>
+      <td>${data[i].gender}</td>
+      <td>${data[i].age}</td>
+      `;
 
-      tableRow.appendChild(tableCell);
-    });
+    if (tableBody?.nextSibling) {
+      tableBody.replaceChildren(tableRow);
+    }
 
-    tableBody?.appendChild(tableRow);
-  });
-  pageView.textContent = page;
+    setTimeout(() => {
+      tableBody?.appendChild(tableRow);
+    }, 0);
+  }
+
+  if (page === 1) {
+    previousButton?.setAttribute("disabled", "true");
+  } else {
+    previousButton?.removeAttribute("disabled");
+  }
 };
 
 const startApp = async () => {
+  console.log(page);
+
   await fetchData();
-  renderTable();
 };
 
 document.addEventListener("DOMContentLoaded", startApp);
+
+const fetchData = async (query = "") => {
+  try {
+    const response = await fetch(`${API_URL}${query}`);
+    const jsonData = await response?.json();
+    data = jsonData?.results[0][page];
+    page = +jsonData?.info?.page;
+    pageView.textContent = page;
+    isLoader();
+    renderTable();
+
+    console.log("Here<><><><><>", data);
+    console.log("page", page);
+  } catch (error) {
+    throw new Error(error);
+  }
+};
