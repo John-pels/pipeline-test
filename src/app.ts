@@ -1,6 +1,8 @@
 const tableBody = document.querySelector("tbody[data-sink]") as HTMLElement;
 const pageView = document.querySelector("label[data-pageview]") as HTMLElement;
-const previousButton = document.querySelector("button[data-prevbtn]");
+const previousButton = document.querySelector(
+  "button[data-prevbtn]"
+) as HTMLButtonElement;
 const nextButton = document.querySelector(
   "button[data-nextbtn]"
 ) as HTMLButtonElement;
@@ -10,12 +12,12 @@ let page: number = 1;
 let data: Array<any> = [];
 
 previousButton?.addEventListener("click", () => {
-  page -= 1;
-  fetchData(`&page=${page}`);
+  page--;
+  console.log("prev", page);
 });
 
 nextButton?.addEventListener("click", () => {
-  page += 1;
+  page++;
   isLoader(true);
   fetchData(`&page=${page}`);
 });
@@ -54,16 +56,15 @@ const renderTable = () => {
   } else {
     previousButton?.removeAttribute("disabled");
   }
-
-  pageView.textContent = `Showing Page ${page}`;
 };
 
 const fetchData = async (query = "") => {
   try {
-    const response = await fetch(`${API_URL}${query}`);
+    const response = await fetch(API_URL + query);
     const jsonData = await response?.json();
     data = jsonData?.results[0][page];
     page = +jsonData?.info?.page;
+    pageView.textContent = "Showing Page " + page;
     isLoader();
     renderTable();
   } catch (error) {
