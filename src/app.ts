@@ -1,7 +1,10 @@
-const tableBody: any = document.querySelector("tbody[data-sink]");
-const pageView: any = document.querySelector("label[data-pageview]");
+const tableBody = document.querySelector("tbody[data-sink]") as HTMLElement;
+const pageView = document.querySelector("label[data-pageview]") as HTMLElement;
 const previousButton = document.querySelector("button[data-prevbtn]");
-const nextButton: any = document.querySelector("button[data-nextbtn]");
+const nextButton = document.querySelector(
+  "button[data-nextbtn]"
+) as HTMLButtonElement;
+
 const API_URL = "https://randomapi.com/api/8csrgnjw?key=LEIX-GF3O-AG7I-6J84";
 let page: number = 1;
 let data: Array<any> = [];
@@ -30,11 +33,11 @@ const isLoader = (isLoad = false) => {
 const renderTable = () => {
   for (let i = 0; i < data.length; i++) {
     let tableRow = document.createElement("tr");
-    tableRow.setAttribute("data-entryid", data[i].id);
+    tableRow.setAttribute("data-entryid", data[i]?.id);
     tableRow.innerHTML = `
-      <td>${data[i].row}</td>
-      <td>${data[i].gender}</td>
-      <td>${data[i].age}</td>
+      <td>${data[i]?.row}</td>
+      <td>${data[i]?.gender}</td>
+      <td>${data[i]?.age}</td>
       `;
 
     if (tableBody?.nextSibling) {
@@ -51,6 +54,8 @@ const renderTable = () => {
   } else {
     previousButton?.removeAttribute("disabled");
   }
+
+  pageView.textContent = `Showing Page ${page}`;
 };
 
 const fetchData = async (query = "") => {
@@ -59,7 +64,6 @@ const fetchData = async (query = "") => {
     const jsonData = await response?.json();
     data = jsonData?.results[0][page];
     page = +jsonData?.info?.page;
-    pageView.textContent = `Showing Page ${page}`;
     isLoader();
     renderTable();
   } catch (error) {
@@ -71,4 +75,4 @@ const startApp = async () => {
   await fetchData();
 };
 
-document.addEventListener("readystatechange", startApp);
+document.addEventListener("DOMContentLoaded", startApp);
