@@ -1,12 +1,10 @@
-import { iData } from "./@types";
-
 const tableBody: any = document.querySelector("tbody[data-sink]");
 const pageView: any = document.querySelector("label[data-pageview]");
 const previousButton = document.querySelector("button[data-prevbtn]");
 const nextButton: any = document.querySelector("button[data-nextbtn]");
 const API_URL = "https://randomapi.com/api/8csrgnjw?key=LEIX-GF3O-AG7I-6J84";
 let page: number = 1;
-let data: Array<iData> = [];
+let data: Array<any> = [];
 
 previousButton?.addEventListener("click", () => {
   page -= 1;
