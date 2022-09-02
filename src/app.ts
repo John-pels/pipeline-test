@@ -12,12 +12,12 @@ let page: number = 1;
 let data: Array<any> = [];
 
 previousButton?.addEventListener("click", () => {
-  page--;
-  console.log("prev", page);
+  page -= 1;
+  fetchData(`&page=${page}`);
 });
 
 nextButton?.addEventListener("click", () => {
-  page++;
+  page += 1;
   isLoader(true);
   fetchData(`&page=${page}`);
 });
@@ -35,7 +35,7 @@ const isLoader = (isLoad = false) => {
 const renderTable = () => {
   for (let i = 0; i < data.length; i++) {
     let tableRow = document.createElement("tr");
-    tableRow.setAttribute("data-entryid", data[i]?.id);
+    tableRow?.setAttribute("data-entryid", data[i]?.id);
     tableRow.innerHTML = `
       <td>${data[i]?.row}</td>
       <td>${data[i]?.gender}</td>
@@ -43,7 +43,7 @@ const renderTable = () => {
       `;
 
     if (tableBody?.nextSibling) {
-      tableBody.replaceChildren(tableRow);
+      tableBody?.replaceChildren(tableRow);
     }
 
     setTimeout(() => {
@@ -74,6 +74,7 @@ const fetchData = async (query = "") => {
 
 const startApp = async () => {
   await fetchData();
+  pageView.textContent = "Showing Page " + page;
 };
 
 document.addEventListener("DOMContentLoaded", startApp);
