@@ -1,29 +1,50 @@
+//DOM Selectors
+
+import { iRecord } from "./@types";
+
 const tableBody = document.querySelector("tbody[data-sink]") as HTMLElement;
 const pageView = document.querySelector("label[data-pageview]") as HTMLElement;
 const previousButton = document.querySelector(
   "button[data-prevbtn]"
 ) as HTMLButtonElement;
+
 const nextButton = document.querySelector(
   "button[data-nextbtn]"
 ) as HTMLButtonElement;
 
-const API_URL = "https://randomapi.com/api/8csrgnjw?key=LEIX-GF3O-AG7I-6J84";
-let page: number = 1;
-let data: Array<any> = [];
+const placeholder = document.querySelector("[data-placeholder]") as HTMLElement;
 
-previousButton?.addEventListener("click", async () => {
+const API_URL =
+  "https://randomapi.com/api/8csrgnjw?key=LEIX-GF3O-AG7I-6J84&page=";
+let page: number = 1;
+let data: { [key: number]: Array<iRecord> } = {};
+
+//previous button click event
+
+previousButton?.addEventListener("click", () => {
   page -= 1;
-  data = [];
-  await fetchData(`&page=${page}`);
-  console.log("prev", page);
+  if (data[page]) {
+    placeholder.textContent = "";
+    renderTable(data[page]);
+  } else {
+    isLoader(true);
+    fetchData();
+  }
+  handleDisablePrevButton();
 });
 
-nextButton?.addEventListener("click", async () => {
+//next button click event
+
+nextButton?.addEventListener("click", () => {
   page += 1;
-  data = [];
-  console.log("next", page);
-  isLoader(true);
-  await fetchData(`&page=${page}`);
+  if (data[page]) {
+    placeholder.textContent = "";
+    renderTable(data[page]);
+  } else {
+    isLoader(true);
+    fetchData();
+  }
+  handleDisablePrevButton();
 });
 
 const isLoader = (isLoad = false) => {
@@ -36,45 +57,42 @@ const isLoader = (isLoad = false) => {
   }
 };
 
-const renderTable = () => {
-  for (let i = 0; i < data.length; i++) {
-    let tableRow = document.createElement("tr");
-    tableRow?.setAttribute("data-entryid", data[i]?.id);
-    tableRow.innerHTML = `
-      <td>${data[i]?.row}</td>
-      <td>${data[i]?.gender}</td>
-      <td>${data[i]?.age}</td>
-      `;
-
-    if (tableBody?.nextSibling) {
-      tableBody?.replaceChildren(tableRow);
-    }
-
-    setTimeout(() => {
-      tableBody?.appendChild(tableRow);
-    }, 0);
-  }
-
-  if (page === 1) {
+const handleDisablePrevButton = () => {
+  if (page <= 1) {
     previousButton?.setAttribute("disabled", "true");
   } else {
     previousButton?.removeAttribute("disabled");
   }
-
-  pageView.textContent = "Showing Page " + page;
 };
 
-const fetchData = async (query = "") => {
+const renderTable = (record: Array<iRecord>) => {
+  tableBody.innerHTML = "";
+  isLoader(false);
+  for (let i = 0; i < record.length; i++) {
+    tableBody.innerHTML += `
+  <tr  data-entryid=${record[i].id}>
+    <td>${record[i].row}</td>
+    <td>${record[i].gender}</td>
+    <td>${record[i].age}</td>
+  </tr>
+    `;
+  }
+
+  pageView.innerHTML = `Showing Page ${page}`;
+};
+
+const fetchData = async () => {
   try {
-    const response = await fetch(API_URL + query);
-    const jsonData = await response?.json();
-    data = jsonData?.results[0][page];
-    page = +jsonData?.info?.page;
-    console.log("json", jsonData);
-    console.log("page count", page);
-    isLoader();
-    renderTable();
+    placeholder.textContent = "You care for cookies? Now check it out!...";
+    isLoader(true);
+    const response = await fetch(`${API_URL}${page}`);
+    const jsonData = await response.json();
+    data = { ...data, ...jsonData.results[0] };
+    renderTable(data[page]);
+    placeholder.textContent = "";
   } catch (error) {
+    page -= 1;
+    placeholder.textContent = "Could not fetch data, please refresh.";
     throw new Error(error);
   }
 };

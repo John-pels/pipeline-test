@@ -100,7 +100,6 @@ tbody tr:nth-child(even) {
   margin: 0.6em 1em;
 }
 
-.btn-disabled {
-  background-color: #767a76;
-  pointer-events: none;
+.placeholder {
+  padding-bottom: 20px;
 }
