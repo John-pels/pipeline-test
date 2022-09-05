@@ -1,6 +1,11 @@
-//DOM Selectors
+interface iRecord {
+  id: string;
+  age: number;
+  gender: string;
+  row: string;
+}
 
-import { iRecord } from "./types";
+//DOM Selectors
 
 const tableBody = document.querySelector("tbody[data-sink]") as HTMLElement;
 const pageView = document.querySelector("label[data-pageview]") as HTMLElement;
@@ -98,7 +103,7 @@ const fetchData = async () => {
 };
 
 const startApp = async () => {
-  await fetchData();
+  fetchData();
 };
 
 document.addEventListener("DOMContentLoaded", startApp);
