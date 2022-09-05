@@ -11,15 +11,19 @@ const API_URL = "https://randomapi.com/api/8csrgnjw?key=LEIX-GF3O-AG7I-6J84";
 let page: number = 1;
 let data: Array<any> = [];
 
-previousButton?.addEventListener("click", () => {
+previousButton?.addEventListener("click", async () => {
   page -= 1;
-  fetchData(`&page=${page}`);
+  data = [];
+  await fetchData(`&page=${page}`);
+  console.log("prev", page);
 });
 
-nextButton?.addEventListener("click", () => {
+nextButton?.addEventListener("click", async () => {
   page += 1;
+  data = [];
+  console.log("next", page);
   isLoader(true);
-  fetchData(`&page=${page}`);
+  await fetchData(`&page=${page}`);
 });
 
 const isLoader = (isLoad = false) => {
@@ -56,6 +60,8 @@ const renderTable = () => {
   } else {
     previousButton?.removeAttribute("disabled");
   }
+
+  pageView.textContent = "Showing Page " + page;
 };
 
 const fetchData = async (query = "") => {
@@ -64,7 +70,8 @@ const fetchData = async (query = "") => {
     const jsonData = await response?.json();
     data = jsonData?.results[0][page];
     page = +jsonData?.info?.page;
-    pageView.textContent = "Showing Page " + page;
+    console.log("json", jsonData);
+    console.log("page count", page);
     isLoader();
     renderTable();
   } catch (error) {
@@ -74,7 +81,6 @@ const fetchData = async (query = "") => {
 
 const startApp = async () => {
   await fetchData();
-  pageView.textContent = "Showing Page " + page;
 };
 
 document.addEventListener("DOMContentLoaded", startApp);

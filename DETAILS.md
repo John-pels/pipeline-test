@@ -6,7 +6,7 @@
 >
 > -     HTML, CSS and Typescript
 > -     Parcel for building and transpilation
-> -     Random API [link](https://randomapi.com/api/8csrgnjw?key=LEIX-GF3O-AG7I-6J84) with pagination
+> -     Random API with pagination
 
 > #### To run the app on your local computer
 >
