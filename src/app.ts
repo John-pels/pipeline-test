@@ -1,6 +1,6 @@
 //DOM Selectors
 
-import { iRecord } from "./@types";
+import { iRecord } from "./types";
 
 const tableBody = document.querySelector("tbody[data-sink]") as HTMLElement;
 const pageView = document.querySelector("label[data-pageview]") as HTMLElement;
